@@ -112,8 +112,8 @@ st.markdown(f"""
 st.write("### 🌸 Nos Valentine Packages")
 col1, col2 = st.columns(2)
 packs = [
-    {"nom": "PACK SWEET HEART", "prix": "20.000 F", "img": "https://images.unsplash.com/photo-1591886960571-74d43a9d4166"},
-    {"nom": "PACK LOVE STORY", "prix": "30.000 F", "img": "https://images.unsplash.com/photo-1526047932273-341f2a7631f9"}
+    {"nom": "PACK SWEET HEART", "prix": "20.000 F", "img": ("bouquet.jpeg")},
+    {"nom": "PACK LOVE STORY", "prix": "30.000 F", "img": ("fleur.jpeg")}
 ]
 
 for i, p in enumerate(packs):
