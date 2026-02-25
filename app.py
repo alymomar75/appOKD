@@ -2,7 +2,7 @@ import streamlit as st
 import base64
 import os
 
-# 1. CONFIGURATION (BARRE LATÉRALE CACHÉE)
+# 1. CONFIGURATION
 st.set_page_config(
     page_title="The Floral Corner",
     page_icon="🌸",
@@ -16,18 +16,20 @@ def get_base64_image(image_path):
             return base64.b64encode(img_file.read()).decode()
     return ""
 
-# Récupération du logo
 img_logo = get_base64_image("logo.jpg")
 
-# --- CSS RÉPARÉ : NAVBAR TRANSPARENTE & STYLE PRO ---
+# Initialisation du panier dans la session
+if 'panier' not in st.session_state:
+    st.session_state['panier'] = []
+
+# --- CSS AVANCÉ ---
 st.markdown(f"""
     <style>
-    /* Masquer les éléments Streamlit inutiles */
     [data-testid="stSidebar"] {{ display: none; }}
     [data-testid="stHeader"] {{ visibility: hidden; }}
-    .main .block-container {{ padding-top: 0rem; padding-bottom: 5rem; max-width: 100%; }}
+    .main .block-container {{ padding-top: 0rem; padding-bottom: 2rem; max-width: 100%; }}
 
-    /* FOND LIQUIDE ROUGE GLACÉ (CONSERVÉ) */
+    /* FOND LIQUIDE */
     .stApp {{
         background: linear-gradient(-45deg, #7d0a0a, #d14d5d, #2d5a27, #fce4ec);
         background-size: 400% 400%;
@@ -39,11 +41,11 @@ st.markdown(f"""
         100% {{ background-position: 0% 50%; }}
     }}
 
-    /* NAVBAR RÉTABLIE (Translucide) */
+    /* NAVBAR AVEC PANIER CLIQUABLE */
     .nav-bar {{
         position: fixed;
-        top: 0; left: 0; width: 100%; height: 90px;
-        background: rgba(255, 255, 255, 0.1); /* Effet translucide */
+        top: 0; left: 0; width: 100%; height: 80px;
+        background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(15px);
         -webkit-backdrop-filter: blur(15px);
         display: flex;
@@ -55,75 +57,56 @@ st.markdown(f"""
     }}
 
     .logo-circle {{
-        width: 70px; height: 70px;
+        width: 60px; height: 60px;
         border-radius: 50%; border: 2px solid white;
         background: white; object-fit: cover;
     }}
 
-    .cart-icon {{ font-size: 24px; color: white; cursor: pointer; }}
+    .content-spacer {{ padding-top: 110px; }}
 
-    .content-spacer {{ padding-top: 130px; }}
-
-    /* TYPOGRAPHIE ET TITRES */
-    .brand-title {{
-        text-align: center; color: #2d5a27; font-weight: 900; line-height: 1;
-    }}
-    .floral-text {{ color: #ff69b4; font-family: 'serif'; font-style: italic; }}
-
-    /* BOUTONS PRODUITS PRO */
-    .stButton>button {{
-        border-radius: 12px;
-        transition: all 0.3s ease;
-    }}
-    
-    /* BOUTON DE VALIDATION FLASHY MAIS PRO (Sans fusée) */
-    div.stButton > button:first-child[kind="primary"] {{
-        background: linear-gradient(90deg, #d14d5d, #7d0a0a);
-        color: white;
+    /* BOUTON PANIER DANS LA NAV */
+    .cart-btn {{
+        background: none;
         border: none;
-        padding: 1.5rem;
-        font-size: 1.2rem;
-        font-weight: bold;
-        width: 100%;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }}
 
-    /* BOUTON WHATSAPP ÉPURÉ */
-    .wa-link {{
-        position: fixed;
-        bottom: 25px; right: 25px;
-        background: #25d366; color: white !important;
-        padding: 12px 20px; border-radius: 30px;
-        text-decoration: none; font-weight: bold;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        z-index: 1000;
-        display: flex; align-items: center; gap: 8px;
+    /* PRODUITS */
+    .product-box {{
+        background: rgba(255, 255, 255, 0.85); 
+        padding: 15px; border-radius: 18px; text-align: center;
     }}
     </style>
+""", unsafe_allow_html=True)
 
-    <div class="nav-bar">
-        <img src="data:image/jpeg;base64,{img_logo}" class="logo-circle">
-        <div class="cart-icon">🛒</div>
+# --- BARRE DE NAVIGATION ---
+# Note: On utilise des colonnes Streamlit pour simuler la navbar car les boutons HTML bruts ne peuvent pas déclencher de fonctions Python facilement
+with st.container():
+    cols_nav = st.columns([1, 10, 2])
+    with cols_nav[0]:
+        st.markdown(f'<img src="data:image/jpeg;base64,{img_logo}" class="logo-circle">', unsafe_allow_html=True)
+    with cols_nav[2]:
+        if st.button(f"🛒 ({len(st.session_state['panier'])})"):
+            st.session_state['voir_panier'] = True
+            st.toast("Direction votre panier...")
+
+st.markdown('<div class="content-spacer"></div>', unsafe_allow_html=True)
+
+# --- TITRE ---
+st.markdown("""
+    <div style="text-align: center; color: white;">
+        <h1 style="font-size: 2.8rem; margin:0; color: #2d5a27;">THE <span style="color: #ff69b4; font-family: serif; font-style: italic;">Floral</span> CORNER</h1>
+        <p style="letter-spacing: 5px; opacity: 0.9;">BY KALINA</p>
     </div>
-    
-    <div class="content-spacer"></div>
-
-    <div class="brand-title">
-        <h1 style="font-size: 3rem; margin:0;">THE <span class="floral-text">Floral</span> CORNER</h1>
-        <p style="letter-spacing: 4px; color: white; font-size: 0.9rem;">BY KALINA</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-# --- BOUTON WHATSAPP DISCRET ---
-st.markdown(f"""
-    <a href="https://wa.me/221774474769?text=Bonjour Kalina, je suis sur votre site et j'aimerais avoir des informations sur vos bouquets." class="wa-link" target="_blank">
-        Envoyer un message 📩
-    </a>
 """, unsafe_allow_html=True)
 
 # --- CATALOGUE ---
-st.write("### Nos Collections de Saison")
-
+st.write("### Nos Valentine Packages")
 col1, col2 = st.columns(2)
 packs = [
     {"nom": "PACK SWEET HEART", "prix": "20.000 F", "img": "https://images.unsplash.com/photo-1591886960571-74d43a9d4166"},
@@ -133,45 +116,65 @@ packs = [
 for i, p in enumerate(packs):
     with (col1 if i == 0 else col2):
         st.markdown(f"""
-            <div style="background: rgba(255,255,255,0.85); padding:12px; border-radius:18px; margin-bottom:10px;">
-                <img src="{p['img']}" style="width:100%; border-radius:15px; height:220px; object-fit:cover;">
-                <h4 style="color: #1a1a1a; margin-top:10px; margin-bottom:0;">{p['nom']}</h4>
+            <div class="product-box">
+                <img src="{p['img']}" style="width:100%; border-radius:12px; height:200px; object-fit:cover;">
+                <h4 style="color: #111; margin:10px 0 5px 0;">{p['nom']}</h4>
                 <p style="color: #d14d5d; font-weight: bold;">{p['prix']}</p>
             </div>
         """, unsafe_allow_html=True)
-        if st.button(f"Ajouter au panier", key=f"btn_{i}"):
-            st.session_state['cart'] = p['nom']
-            st.toast(f"{p['nom']} sélectionné")
+        # Bouton Ajouter au panier
+        if st.button(f"Ajouter au panier", key=f"add_{i}"):
+            st.session_state['panier'].append(p)
+            st.toast(f"{p['nom']} ajouté !")
+            st.rerun()
 
-# --- CARTE DE FIDÉLITÉ ---
-st.write("---")
-st.subheader("Votre Carte Membre")
-c_user, c_card = st.columns([1, 1])
+# --- SECTION PANIER (S'affiche si on clique sur l'icône) ---
+if st.session_state.get('voir_panier', False):
+    st.markdown("---")
+    st.subheader("🛒 Votre Panier")
+    if len(st.session_state['panier']) > 0:
+        for item in st.session_state['panier']:
+            st.write(f"✅ {item['nom']} - {item['prix']}")
+        if st.button("Vider le panier"):
+            st.session_state['panier'] = []
+            st.rerun()
+    else:
+        st.info("Votre panier est vide pour le moment.")
 
-with c_user:
-    u_nom = st.text_input("Nom de famille")
-    u_prenom = st.text_input("Prénom")
-
-with c_card:
-    full_name = f"{u_prenom} {u_nom}".strip().upper()
+# --- FIDÉLITÉ ---
+st.divider()
+st.subheader("Carte VIP")
+c_in, c_vis = st.columns(2)
+with c_in:
+    nom = st.text_input("Nom")
+    prenom = st.text_input("Prénom")
+with c_vis:
+    user_name = f"{prenom} {nom}".strip().upper()
     st.markdown(f"""
-        <div style="background: linear-gradient(135deg, #222, #444); border: 1px solid #d4af37; border-radius: 15px; padding: 25px; color: #d4af37; font-family: monospace; box-shadow: 0 10px 20px rgba(0,0,0,0.4);">
-            <div style="font-size: 0.7rem; opacity: 0.8;">MEMBRE VIP</div>
-            <div style="font-size: 1.4rem; margin: 15px 0; letter-spacing: 2px;">{full_name if full_name else "VOTRE NOM"}</div>
-            <div style="text-align: right; font-size: 0.6rem;">THE FLORAL CORNER 🌸</div>
+        <div style="background: linear-gradient(135deg, #111, #333); border: 1px solid #d4af37; border-radius: 12px; padding: 20px; color: #d4af37;">
+            <div style="font-size: 0.6rem;">VIP MEMBER</div>
+            <div style="font-size: 1.2rem; margin: 10px 0;">{user_name if user_name else "CLIENT"}</div>
         </div>
     """, unsafe_allow_html=True)
 
-# --- BOUTON DE VALIDATION FINAL ---
-st.markdown("<br>", unsafe_allow_html=True)
-if st.button("CONFIRMER MA COMMANDE", type="primary"):
-    if u_nom and u_prenom:
-        pack_final = st.session_state.get('cart', 'Bouquet Signature')
-        msg = f"Bonjour Kalina ! Je souhaite commander le {pack_final}. Je m'appelle {u_prenom} {u_nom}."
-        st.success("Commande enregistrée !")
-        st.markdown(f"""<a href="https://wa.me/221774474769?text={msg}" target="_blank">
-            <button style="width:100%; padding:15px; background:#25d366; color:white; border:none; border-radius:10px; cursor:pointer; font-weight:bold;">
-            FINALISER SUR WHATSAPP
-            </button></a>""", unsafe_allow_html=True)
+# --- VALIDATION ---
+if st.button("🚀 CONFIRMER MA COMMANDE", type="primary"):
+    if nom and prenom and st.session_state['panier']:
+        articles = ", ".join([x['nom'] for x in st.session_state['panier']])
+        wa_msg = f"Bonjour Kalina ! Je commande : {articles}. Je suis {prenom} {nom}."
+        st.success("Prêt pour l'envoi !")
+        st.markdown(f'<a href="https://wa.me/221774474769?text={wa_msg}" target="_blank" style="text-decoration:none;"><div style="background:#25d366; color:white; padding:15px; border-radius:10px; text-align:center; font-weight:bold;">FINALISER SUR WHATSAPP 📲</div></a>', unsafe_allow_html=True)
+    elif not st.session_state['panier']:
+        st.error("Votre panier est vide !")
     else:
-        st.warning("Veuillez renseigner votre nom pour la carte VIP.")
+        st.warning("Complétez votre nom pour la carte VIP.")
+
+# --- FOOTER INSTAGRAM ---
+st.markdown(f"""
+    <div style="text-align: center; margin-top: 50px; padding: 30px; background: rgba(0,0,0,0.1);">
+        <a href="https://www.instagram.com/the_floral_corner/" target="_blank" style="text-decoration:none; color:white;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" width="30" style="margin-bottom:10px;"><br>
+            @the_floral_corner
+        </a>
+    </div>
+""", unsafe_allow_html=True)
