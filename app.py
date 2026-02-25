@@ -18,13 +18,13 @@ def get_base64_image(image_path):
 
 # Récupération des images locales
 img_logo = get_base64_image("logo.jpg")
-img_sweet = get_base64_image("bouquet.jpeg")  # Ton image pour le pack Sweet Heart
-img_love = get_base64_image("fleur.jpeg")     # Ton image pour le pack Love Story
+img_sweet = get_base64_image("bouquet.jpeg")
+img_love = get_base64_image("fleur.jpeg")
 
 if 'panier' not in st.session_state:
     st.session_state['panier'] = []
 
-# --- CSS RÉPARÉ POUR MOBILE & DESIGN PRO ---
+# --- CSS RÉPARÉ POUR MOBILE & PAIEMENTS ---
 st.markdown(f"""
     <style>
     [data-testid="stSidebar"] {{ display: none; }}
@@ -66,25 +66,29 @@ st.markdown(f"""
 
     .content-spacer {{ padding-top: 100px; }}
 
-    /* DESIGN DU PIED DE PAGE INSTAGRAM */
-    .insta-footer {{
-        margin: 50px auto;
-        padding: 20px;
-        max-width: 300px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        text-align: center;
-        backdrop-filter: blur(10px);
+    /* LOGOS PAIEMENT */
+    .payment-methods {{
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        filter: grayscale(20%);
+    }}
+    .payment-logo {{
+        height: 25px;
+        object-fit: contain;
     }}
 
-    .insta-badge {{
-        display: inline-flex;
-        align-items: center;
-        gap: 12px;
-        text-decoration: none;
-        color: white !important;
-        font-weight: 600;
+    /* INSTAGRAM BADGE */
+    .insta-footer {{
+        margin: 40px auto;
+        padding: 15px;
+        max-width: 250px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        text-align: center;
+        backdrop-filter: blur(10px);
     }}
     </style>
 
@@ -103,11 +107,10 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# --- CATALOGUE (AVEC CORRECTION IMAGES CARRÉES) ---
+# --- CATALOGUE (FORMAT CARRÉ) ---
 st.write("### 🌸 Nos Valentine Packages")
 col1, col2 = st.columns(2)
 
-# Préparation des images locales
 p1_img = f"data:image/jpeg;base64,{img_sweet}"
 p2_img = f"data:image/jpeg;base64,{img_love}"
 
@@ -119,16 +122,25 @@ packs = [
 for i, p in enumerate(packs):
     with (col1 if i == 0 else col2):
         st.markdown(f"""
-            <div style="background: rgba(255,255,255,0.85); padding:12px; border-radius:18px; margin-bottom:10px; text-align:center;">
-                <div style="width: 100%; aspect-ratio: 1 / 1; overflow: hidden; border-radius: 12px; background: #f9f9f9; display: flex; align-items: center; justify-content: center;">
+            <div style="background: rgba(255,255,255,0.85); padding:10px; border-radius:18px; margin-bottom:10px; text-align:center;">
+                <div style="width: 100%; aspect-ratio: 1 / 1; overflow: hidden; border-radius: 12px; background: white; display: flex; align-items: center; justify-content: center;">
                     <img src="{p['img']}" style="width:100%; height:100%; object-fit: contain;">
                 </div>
-                <h5 style="color: #111; margin:10px 0 2px 0; font-size:0.9rem; font-weight: bold;">{p['nom']}</h5>
-                <p style="color: #d14d5d; font-weight: bold; font-size:0.85rem;">{p['prix']}</p>
+                <h5 style="color: #111; margin:10px 0 2px 0; font-size:0.85rem; font-weight: bold;">{p['nom']}</h5>
+                <p style="color: #d14d5d; font-weight: bold; font-size:0.8rem;">{p['prix']}</p>
             </div>
         """, unsafe_allow_html=True)
-        if st.button(f"Ajouter au panier", key=f"add_{i}", use_container_width=True):
+        if st.button(f"Ajouter", key=f"add_{i}", use_container_width=True):
             st.session_state['panier'].append(p)
+            st.rerun()
+
+# --- RÉCAPITULATIF PANIER ---
+if len(st.session_state['panier']) > 0:
+    with st.expander("🧐 Voir mon panier"):
+        for item in st.session_state['panier']:
+            st.write(f"• {item['nom']} ({item['prix']})")
+        if st.button("Vider mon panier"):
+            st.session_state['panier'] = []
             st.rerun()
 
 # --- CARTE VIP ---
@@ -137,32 +149,46 @@ nom = st.text_input("Nom")
 prenom = st.text_input("Prénom")
 user_name = f"{prenom} {nom}".strip().upper()
 st.markdown(f"""
-    <div style="background: linear-gradient(135deg, #111, #333); border: 1px solid #d4af37; border-radius: 15px; padding: 20px; color: #d4af37; box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
+    <div style="background: linear-gradient(135deg, #111, #333); border: 1px solid #d4af37; border-radius: 15px; padding: 20px; color: #d4af37;">
         <div style="font-size: 0.6rem; letter-spacing: 2px;">THE FLORAL CORNER VIP</div>
         <div style="font-size: 1.1rem; margin: 15px 0; font-weight: bold;">{user_name if user_name else "VOTRE NOM"}</div>
-        <div style="text-align: right; font-size: 0.5rem; opacity: 0.6;">SÉNÉGAL 2026</div>
     </div>
 """, unsafe_allow_html=True)
 
-# --- BOUTON DE VALIDATION ---
+# --- SECTION PAIEMENT & VALIDATION ---
 st.markdown("<br>", unsafe_allow_html=True)
+
+# Logos des moyens de paiement
+st.markdown("""
+    <div style="text-align: center; color: white; font-size: 0.7rem; opacity: 0.8; margin-bottom: 5px;">
+        Modes de règlement acceptés :
+    </div>
+    <div class="payment-methods">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Wave_Logo.png" class="payment-logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Orange_logo.svg/1024px-Orange_logo.svg.png" class="payment-logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" class="payment-logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/1280px-MasterCard_Logo.svg.png" class="payment-logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Apple_Pay_logo.svg/1200px-Apple_Pay_logo.svg.png" class="payment-logo">
+    </div>
+""", unsafe_allow_html=True)
+
 if st.button("🚀 CONFIRMER MA COMMANDE", type="primary", use_container_width=True):
     if nom and prenom and st.session_state['panier']:
         items_list = ", ".join([x['nom'] for x in st.session_state['panier']])
-        wa_msg = f"Bonjour Kalina ! Je souhaite valider ma commande pour : {items_list}. Je suis {prenom} {nom}."
+        wa_msg = f"Bonjour Kalina ! Je commande : {items_list}. Je suis {prenom} {nom}."
         st.markdown(f'''<a href="https://wa.me/221774474769?text={wa_msg}" target="_blank" style="text-decoration:none;">
             <div style="background:#25d366; color:white; padding:18px; border-radius:12px; text-align:center; font-weight:bold;">
-                ENVOYER SUR WHATSAPP 📲
+                FINALISER SUR WHATSAPP 📲
             </div></a>''', unsafe_allow_html=True)
     else:
-        st.warning("Vérifiez votre nom et votre panier.")
+        st.warning("Veuillez remplir votre nom et ajouter un article.")
 
-# --- FOOTER INSTAGRAM ---
+# --- FOOTER ---
 st.markdown(f"""
     <div class="insta-footer">
-        <a href="https://www.instagram.com/the_floral_corner/" class="insta-badge" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" width="28">
-            <span>the_floral_corner</span>
+        <a href="https://www.instagram.com/thefloral_corner/" style="text-decoration:none; color:white; font-size:0.8rem; font-weight:bold;" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" width="22" style="vertical-align:middle; margin-right:8px;">
+            @the_floral_corner
         </a>
     </div>
 """, unsafe_allow_html=True)
