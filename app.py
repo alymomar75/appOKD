@@ -153,7 +153,7 @@ option_paiement = st.radio(
 )
 
 # Affichage du logo correspondant à l'option choisie pour confirmer visuellement
-logos = {  "Wave - Mobile Money": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Wave_logo.png", 
+logos = {  "Wave - Mobile Money": "wavelogo.png", 
     "Orange Money": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Orange_logo.svg",
     "MasterCard": "https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
 }
