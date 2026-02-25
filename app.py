@@ -172,7 +172,7 @@ st.markdown("---")
 c1, c2 = st.columns([1, 1])
 
 with c1:
-    st.subheader("Fidélité & Message")
+    st.subheader("carte de fidélité & message personnalisé")
     nom = st.text_input("Nom de famille")
     prenom = st.text_input("Prénom")
     message = st.text_area("Votre mot doux")
@@ -196,13 +196,13 @@ with c2:
 
 # --- BOUTON DE VALIDATION ---
 st.markdown("<br>", unsafe_allow_html=True)
-if st.button("✅ CONFIRMER MA COMMANDE", use_container_width=True):
+if st.button("✔ CONFIRMER MA COMMANDE", use_container_width=True):
     if nom and prenom:
         st.balloons()
         pack_nom = st.session_state.get('selected_pack', 'Non spécifié')
         wa_text = f"Bonjour Kalina ! Commande de {prenom} {nom}. Pack: {pack_nom}. Message: {message}"
         st.success("Commande prête ! Cliquez sur le lien pour envoyer sur WhatsApp.")
-        st.markdown(f"""<a href="https://wa.me/221774474769?text={wa_text}" target="_blank">
+        st.markdown(f"""<a href="https://wa.me/+221774474769?text={wa_text}" target="_blank">
             <button style="width:100%; padding:15px; background-color:#25D366; color:white; border:none; border-radius:10px; font-weight:bold;">
             FINALISER SUR WHATSAPP 📲
             </button></a>""", unsafe_allow_html=True)
