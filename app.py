@@ -16,7 +16,10 @@ def get_base64_image(image_path):
             return base64.b64encode(img_file.read()).decode()
     return ""
 
+# Récupération des images locales
 img_logo = get_base64_image("logo.jpg")
+img_sweet = get_base64_image("bouquet.jpeg")  # Ton image pour le pack Sweet Heart
+img_love = get_base64_image("fleur.jpeg")     # Ton image pour le pack Love Story
 
 if 'panier' not in st.session_state:
     st.session_state['panier'] = []
@@ -40,7 +43,7 @@ st.markdown(f"""
         100% {{ background-position: 0% 50%; }}
     }}
 
-    /* NAVBAR FIXÉE (LOGO GAUCHE / PANIER DROITE) */
+    /* NAVBAR FIXÉE */
     .nav-bar {{
         position: fixed;
         top: 0; left: 0; width: 100%; height: 75px;
@@ -63,7 +66,7 @@ st.markdown(f"""
 
     .content-spacer {{ padding-top: 100px; }}
 
-    /* DESIGN DU PIED DE PAGE INSTAGRAM (PRO) */
+    /* DESIGN DU PIED DE PAGE INSTAGRAM */
     .insta-footer {{
         margin: 50px auto;
         padding: 20px;
@@ -82,14 +85,6 @@ st.markdown(f"""
         text-decoration: none;
         color: white !important;
         font-weight: 600;
-        font-size: 14px;
-        letter-spacing: 0.5px;
-    }}
-
-    /* BOUTONS STREAMLIT HARMONISÉS */
-    div.stButton > button {{
-        border-radius: 12px !important;
-        border: 1px solid rgba(255,255,255,0.2) !important;
     }}
     </style>
 
@@ -111,9 +106,14 @@ st.markdown(f"""
 # --- CATALOGUE ---
 st.write("### 🌸 Nos Valentine Packages")
 col1, col2 = st.columns(2)
+
+# Préparation des packs avec images locales converties en base64
+p1_img = f"data:image/jpeg;base64,{img_sweet}"
+p2_img = f"data:image/jpeg;base64,{img_love}"
+
 packs = [
-    {"nom": "PACK SWEET HEART", "prix": "20.000 F", "img": ("bouquet.jpeg")},
-    {"nom": "PACK LOVE STORY", "prix": "30.000 F", "img": ("fleur.jpeg")}
+    {"nom": "PACK SWEET HEART", "prix": "20.000 F", "img": p1_img},
+    {"nom": "PACK LOVE STORY", "prix": "30.000 F", "img": p2_img}
 ]
 
 for i, p in enumerate(packs):
@@ -153,26 +153,23 @@ st.markdown(f"""
 
 # --- BOUTON DE VALIDATION ---
 st.markdown("<br>", unsafe_allow_html=True)
-if st.button("☑ CONFIRMER MA COMMANDE", type="primary", use_container_width=True):
+if st.button("🚀 CONFIRMER MA COMMANDE", type="primary", use_container_width=True):
     if nom and prenom and st.session_state['panier']:
         items_list = ", ".join([x['nom'] for x in st.session_state['panier']])
         wa_msg = f"Bonjour Kalina ! Je souhaite valider ma commande pour : {items_list}. Je suis {prenom} {nom}."
         st.markdown(f'''<a href="https://wa.me/221774474769?text={wa_msg}" target="_blank" style="text-decoration:none;">
-            <div style="background:#25d366; color:white; padding:18px; border-radius:12px; text-align:center; font-weight:bold; box-shadow: 0 4px 15px rgba(37,211,102,0.4);">
+            <div style="background:#25d366; color:white; padding:18px; border-radius:12px; text-align:center; font-weight:bold;">
                 ENVOYER SUR WHATSAPP 📲
             </div></a>''', unsafe_allow_html=True)
     else:
         st.warning("Vérifiez votre nom et votre panier.")
 
-# --- FOOTER INSTAGRAM PROFESSIONNEL ---
+# --- FOOTER INSTAGRAM ---
 st.markdown(f"""
     <div class="insta-footer">
         <a href="https://www.instagram.com/the_floral_corner/" class="insta-badge" target="_blank">
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" width="28">
             <span>the_floral_corner</span>
         </a>
-    </div>
-    <div style="text-align: center; opacity: 0.5; font-size: 0.6rem; color: white; padding-bottom: 20px;">
-        © 2026 THE FLORAL CORNER • DAKAR, SÉNÉGAL
     </div>
 """, unsafe_allow_html=True)
