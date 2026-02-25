@@ -103,11 +103,11 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# --- CATALOGUE ---
+# --- CATALOGUE (AVEC CORRECTION IMAGES CARRÉES) ---
 st.write("### 🌸 Nos Valentine Packages")
 col1, col2 = st.columns(2)
 
-# Préparation des packs avec images locales converties en base64
+# Préparation des images locales
 p1_img = f"data:image/jpeg;base64,{img_sweet}"
 p2_img = f"data:image/jpeg;base64,{img_love}"
 
@@ -120,22 +120,15 @@ for i, p in enumerate(packs):
     with (col1 if i == 0 else col2):
         st.markdown(f"""
             <div style="background: rgba(255,255,255,0.85); padding:12px; border-radius:18px; margin-bottom:10px; text-align:center;">
-                <img src="{p['img']}" style="width:100%; border-radius:12px; height:180px; object-fit:cover;">
-                <h5 style="color: #111; margin:10px 0 2px 0; font-size:0.9rem;">{p['nom']}</h5>
-                <p style="color: #d14d5d; font-weight: bold; font-size:0.8rem;">{p['prix']}</p>
+                <div style="width: 100%; aspect-ratio: 1 / 1; overflow: hidden; border-radius: 12px; background: #f9f9f9; display: flex; align-items: center; justify-content: center;">
+                    <img src="{p['img']}" style="width:100%; height:100%; object-fit: contain;">
+                </div>
+                <h5 style="color: #111; margin:10px 0 2px 0; font-size:0.9rem; font-weight: bold;">{p['nom']}</h5>
+                <p style="color: #d14d5d; font-weight: bold; font-size:0.85rem;">{p['prix']}</p>
             </div>
         """, unsafe_allow_html=True)
         if st.button(f"Ajouter au panier", key=f"add_{i}", use_container_width=True):
             st.session_state['panier'].append(p)
-            st.rerun()
-
-# --- RÉCAPITULATIF PANIER ---
-if len(st.session_state['panier']) > 0:
-    with st.expander("🧐 Voir le détail de mon panier"):
-        for item in st.session_state['panier']:
-            st.write(f"• {item['nom']} ({item['prix']})")
-        if st.button("Vider mon panier", type="secondary"):
-            st.session_state['panier'] = []
             st.rerun()
 
 # --- CARTE VIP ---
