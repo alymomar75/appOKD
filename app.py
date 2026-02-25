@@ -24,7 +24,7 @@ img_love = get_base64_image("fleur.jpeg")
 if 'panier' not in st.session_state:
     st.session_state['panier'] = []
 
-# --- CSS RÉPARÉ POUR MOBILE & PAIEMENTS ---
+# --- CSS ---
 st.markdown(f"""
     <style>
     [data-testid="stSidebar"] {{ display: none; }}
@@ -107,7 +107,7 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# --- CATALOGUE (FORMAT CARRÉ) ---
+# --- CATALOGUE ---
 st.write("### 🌸 Nos Valentine Packages")
 col1, col2 = st.columns(2)
 
@@ -134,7 +134,7 @@ for i, p in enumerate(packs):
             st.session_state['panier'].append(p)
             st.rerun()
 
-# --- RÉCAPITULATIF PANIER ---
+# --- PANIER ---
 if len(st.session_state['panier']) > 0:
     with st.expander("🧐 Voir mon panier"):
         for item in st.session_state['panier']:
@@ -155,7 +155,7 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# --- SECTION PAIEMENT & VALIDATION ---
+# --- PAIEMENT ---
 st.markdown("<br>", unsafe_allow_html=True)
 
 st.markdown("""
@@ -180,4 +180,5 @@ st.markdown("""
             <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" class="payment-logo">
         </a>
         <!-- MasterCard -->
-        <a href="https://www
+        <a href="https://www.mastercard.com" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/MasterCard
