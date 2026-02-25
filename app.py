@@ -1,35 +1,38 @@
 import streamlit as st
 import base64
 import os
-from PIL import Image
 
-# Configuration de la page
+# 1. CONFIGURATION DE LA PAGE (DOIT ÊTRE EN PREMIER)
 st.set_page_config(
-    page_title="The Floral Corner | Boutique",
+    page_title="The Floral Corner",
     page_icon="🌸",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed" # Cache la barre latérale par défaut
 )
 
-# --- FONCTION POUR CONVERTIR LES IMAGES EN BASE64 ---
+# --- FONCTIONS UTILES ---
 def get_base64_image(image_path):
     if os.path.exists(image_path):
         with open(image_path, "rb") as img_file:
             return base64.b64encode(img_file.read()).decode()
     return ""
 
-# On récupère le logo et on prépare des placeholders pour tes photos de fleurs
-# Remplace 'pack1.jpg', etc., par les noms de tes fichiers sur GitHub
 img_logo = get_base64_image("logo.jpg")
 
-# --- CSS : FOND LIQUIDE ROUGE & NAVBAR APPLE ---
+# --- CSS AVANCÉ (MODE SOMBRE/CLAIR & FULL WIDTH) ---
 st.markdown(f"""
     <style>
-    /* Fond Liquide Glacé Rougeâtre */
+    /* Supprimer les marges par défaut de Streamlit et la barre latérale */
+    [data-testid="stSidebar"] {{ display: none; }}
+    [data-testid="stHeader"] {{ background: rgba(0,0,0,0); }}
+    .main .block-container {{ padding-top: 0rem; padding-bottom: 0rem; max-width: 100%; }}
+
+    /* Fond Adaptatif (Dégradé liquide rouge glacé) */
     .stApp {{
         background: linear-gradient(135deg, #7d0a0a 0%, #d14d5d 50%, #fce4ec 100%);
+        background-attachment: fixed;
         background-size: 400% 400%;
         animation: gradientBG 15s ease infinite;
-        color: white;
     }}
     
     @keyframes gradientBG {{
@@ -38,141 +41,170 @@ st.markdown(f"""
         100% {{ background-position: 0% 50%; }}
     }}
 
-    /* Navbar Apple-Style avec Logo Circulaire */
+    /* Barre de Navigation plein écran style iOS 26 */
     .nav-bar {{
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 90px;
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        width: 100vw;
+        height: 85px;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         align-items: center;
+        padding: 0 20px;
         z-index: 9999;
         border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }}
 
     .logo-circle {{
-        width: 75px;
-        height: 75px;
+        width: 65px;
+        height: 65px;
         border-radius: 50%;
         border: 2px solid white;
         background: white;
         object-fit: cover;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }}
 
-    .content-spacer {{ padding-top: 120px; }}
+    .content-spacer {{ padding-top: 110px; }}
 
-    /* Titres avec couleurs spécifiques */
-    .title-container {{ text-align: center; margin-bottom: 20px; }}
-    .t-the {{ color: #2d5a27; font-size: 45px; font-weight: bold; }}
-    .t-floral {{ color: #ff69b4; font-size: 50px; font-family: 'serif'; italic; }}
-    .t-corner {{ color: #2d5a27; font-size: 45px; font-weight: bold; }}
-    .t-by {{ color: #2d5a27; font-size: 20px; font-weight: bold; display: block; }}
+    /* Adaptabilité Texte (Sombre/Clair) */
+    @media (prefers-color-scheme: dark) {{
+        .product-card {{ background: rgba(30, 30, 30, 0.8) !important; color: white !important; }}
+        .stMarkdown p, .stMarkdown h2 {{ color: white !important; }}
+    }}
+    @media (prefers-color-scheme: light) {{
+        .product-card {{ background: rgba(255, 255, 255, 0.85) !important; color: #1a1a1a !important; }}
+        .stMarkdown p, .stMarkdown h2 {{ color: #1a1a1a !important; }}
+    }}
 
-    /* Cartes Produits */
+    /* Titres Logo Textuel */
+    .title-container {{ text-align: center; line-height: 1.1; }}
+    .t-the {{ color: #2d5a27; font-size: clamp(30px, 8vw, 50px); font-weight: 900; }}
+    .t-floral {{ color: #ff69b4; font-size: clamp(35px, 9vw, 55px); font-family: 'serif'; font-style: italic; }}
+    .t-corner {{ color: #2d5a27; font-size: clamp(30px, 8vw, 50px); font-weight: 900; }}
+
+    /* Cartes Produits Interactives */
     .product-card {{
-        background: rgba(255, 255, 255, 0.9);
-        border-radius: 20px;
+        border-radius: 25px;
         padding: 15px;
         text-align: center;
-        color: #1a1a1a;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        transition: transform 0.3s ease;
+        border: 1px solid rgba(255,255,255,0.3);
+        margin-bottom: 20px;
     }}
+    .product-card:hover {{ transform: translateY(-10px); }}
+    
     .product-img {{
         width: 100%;
-        height: 200px;
-        border-radius: 15px;
+        height: 220px;
+        border-radius: 20px;
         object-fit: cover;
-        margin-bottom: 10px;
     }}
 
-    /* Carte de Fidélité VIP Temp Réel */
+    /* Carte VIP Luxueuse */
     .vip-card {{
-        background: linear-gradient(135deg, #d4af37 0%, #aa891a 100%);
-        border-radius: 20px;
-        padding: 30px;
-        color: white;
-        text-align: center;
-        border: 2px solid #f1d38e;
-        box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-        margin-top: 20px;
+        background: linear-gradient(145deg, #222, #444);
+        border: 1px solid #d4af37;
+        border-radius: 18px;
+        padding: 25px;
+        color: #d4af37;
+        text-align: left;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        font-family: 'Courier New', Courier, monospace;
+    }}
+    .vip-chip {{
+        width: 40px;
+        height: 30px;
+        background: linear-gradient(90deg, #d4af37, #f1d38e);
+        border-radius: 5px;
+        margin-bottom: 20px;
     }}
     </style>
 
     <div class="nav-bar">
         <img src="data:image/jpeg;base64,{img_logo}" class="logo-circle">
+        <div style="color: white; font-weight: bold; font-size: 1.2em;">🌸 2026</div>
     </div>
     <div class="content-spacer"></div>
 
     <div class="title-container">
-        <span class="t-the">THE</span> <span class="t-floral">Floral</span> <span class="t-corner">CORNER</span>
-        <span class="t-by">BY KALINA</span>
-        <p style="color: white; font-style: italic;">1er Bar à Fleurs Mobile au Sénégal 🇸🇳</p>
+        <span class="t-the">THE</span> <span class="t-floral">Floral</span> <span class="t-corner">CORNER</span><br>
+        <span style="color: #2d5a27; font-weight: bold; letter-spacing: 3px;">BY KALINA</span>
     </div>
     """, unsafe_allow_html=True)
 
-# --- CATALOGUE AVEC PHOTOS ---
-st.write("## 🎁 Nos Valentine Packages 2026")
+# --- SECTION PRODUITS ---
+st.markdown("<h2 style='text-align: center;'>Nos Valentine Packages</h2>", unsafe_allow_html=True)
 
-# Liste des packs. Remplace les 'url_ou_chemin' par tes vraies photos.
+# Ici, tu peux ajouter plusieurs images par pack dans une liste
 packs = [
-    {"nom": "PACK SWEET HEART", "prix": "20.000 F", "img": "https://images.unsplash.com/photo-1591886960571-74d43a9d4166?q=80&w=500"},
-    {"nom": "PACK LOVE STORY", "prix": "30.000 F", "img": "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?q=80&w=500"},
-    {"nom": "PACK PASSION", "prix": "40.000 F", "img": "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?q=80&w=500"},
-    {"nom": "PACK MBEUGUEL SIGNATURE", "prix": "60.000 F", "img": "https://images.unsplash.com/photo-1533616688419-b7a585564566?q=80&w=500"}
+    {"id": "sweet", "nom": "PACK SWEET HEART", "prix": "20.000 F", "imgs": ["https://images.unsplash.com/photo-1591886960571-74d43a9d4166"]},
+    {"id": "love", "nom": "PACK LOVE STORY", "prix": "30.000 F", "imgs": ["https://images.unsplash.com/photo-1526047932273-341f2a7631f9"]},
+    {"id": "passion", "nom": "PACK PASSION", "prix": "40.000 F", "imgs": ["https://images.unsplash.com/photo-1550989460-0adf9ea622e2"]},
+    {"id": "vip", "nom": "SIGNATURE VIP", "prix": "60.000 F", "imgs": ["https://images.unsplash.com/photo-1533616688419-b7a585564566"]}
 ]
 
-col1, col2 = st.columns(2)
+cols = st.columns(2)
 for i, p in enumerate(packs):
-    with (col1 if i % 2 == 0 else col2):
+    with cols[i % 2]:
         st.markdown(f"""
             <div class="product-card">
-                <img src="{p['img']}" class="product-img">
-                <h3 style="margin:0;">{p['nom']}</h3>
-                <h4 style="color: #d14d5d;">{p['prix']}</h4>
+                <img src="{p['imgs'][0]}" class="product-img">
+                <h3 style="margin-top:10px;">{p['nom']}</h3>
+                <h4 style="color: #ff69b4;">{p['prix']}</h4>
             </div>
         """, unsafe_allow_html=True)
-        st.button(f"Choisir {p['nom']}", key=f"p_{i}")
+        # Expander pour voir plus de photos
+        with st.expander(f"📷 Voir détails {p['nom']}"):
+            st.write("Photos supplémentaires du pack :")
+            st.image(p['imgs'][0], use_container_width=True)
+        if st.button(f"Sélectionner {p['nom']}", key=p['id']):
+            st.session_state['selected_pack'] = p['nom']
 
-# --- FORMULAIRE & CARTE VIP ---
-st.divider()
-st.subheader("💳 Personnalisation & Fidélité")
+# --- FORMULAIRE & CARTE DYNAMIQUE ---
+st.markdown("---")
+c1, c2 = st.columns([1, 1])
 
-col_form, col_card = st.columns([1, 1])
+with c1:
+    st.subheader("Fidélité & Message")
+    nom = st.text_input("Nom de famille")
+    prenom = st.text_input("Prénom")
+    message = st.text_area("Votre mot doux")
 
-with col_form:
-    nom = st.text_input("Nom", placeholder="Ex: Diop")
-    prenom = st.text_input("Prénom", placeholder="Ex: Mariama")
-    message = st.text_area("Mot doux pour le bouquet")
-
-with col_card:
-    # Rendu de la carte en temps réel
-    nom_complet = f"{prenom} {nom}".strip()
+with c2:
+    # Rendu dynamique de la carte VIP
+    full_name = f"{prenom} {nom}".strip().upper()
     st.markdown(f"""
         <div class="vip-card">
-            <h3 style="margin:0; letter-spacing: 2px;">THE FLORAL CORNER VIP</h3>
-            <hr style="border: 0.5px solid rgba(255,255,255,0.3);">
-            <p style="font-size: 24px; font-weight: bold; text-transform: uppercase;">
-                {nom_complet if nom_complet else "VOTRE NOM ICI"}
-            </p>
-            <p style="font-size: 12px; opacity: 0.8;">MEMBRE PRIVILÉGIÉ • DAKAR</p>
-            <div style="text-align: right; font-size: 20px;">💎</div>
+            <div class="vip-chip"></div>
+            <div style="font-size: 0.8em; opacity: 0.7;">MEMBRE PRIVILÉGIÉ</div>
+            <div style="font-size: 1.5em; font-weight: bold; margin: 10px 0;">
+                {full_name if full_name else "VOTRE NOM ICI"}
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <div style="font-size: 0.7em;">VALIDITÉ: 02/27</div>
+                <div style="font-size: 1.2em;">THE FLORAL CORNER 🌸</div>
+            </div>
         </div>
     """, unsafe_allow_html=True)
 
-# --- PAIEMENT & VALIDATION ---
-st.divider()
-mode = st.radio("Moyen de paiement", ["Orange Money / Wave", "Carte Bancaire", "Espèces (Livraison)"])
-
-if st.button("🚀 VALIDER LA COMMANDE"):
-    if nom_complet:
+# --- BOUTON DE VALIDATION ---
+st.markdown("<br>", unsafe_allow_html=True)
+if st.button("✅ CONFIRMER MA COMMANDE", use_container_width=True):
+    if nom and prenom:
         st.balloons()
-        st.success(f"Merci {prenom} ! Kalina prépare votre pack.")
-        wa_link = f"https://wa.me/221774474769?text=Commande%20de%20{nom_complet}%20:%20{message}"
-        st.markdown(f"[📲 Cliquer ici pour confirmer sur WhatsApp]({wa_link})")
+        pack_nom = st.session_state.get('selected_pack', 'Non spécifié')
+        wa_text = f"Bonjour Kalina ! Commande de {prenom} {nom}. Pack: {pack_nom}. Message: {message}"
+        st.success("Commande prête ! Cliquez sur le lien pour envoyer sur WhatsApp.")
+        st.markdown(f"""<a href="https://wa.me/221774474769?text={wa_text}" target="_blank">
+            <button style="width:100%; padding:15px; background-color:#25D366; color:white; border:none; border-radius:10px; font-weight:bold;">
+            FINALISER SUR WHATSAPP 📲
+            </button></a>""", unsafe_allow_html=True)
     else:
-        st.error("Veuillez entrer votre nom pour la carte VIP.")
+        st.warning("Veuillez remplir votre nom et prénom pour la carte VIP.")
