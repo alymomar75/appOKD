@@ -11,6 +11,7 @@ st.set_page_config(
 )
 
 # --- FONCTION IMAGE BASE64 POUR LE LOGO ---
+st.image("logo.jpg")
 def get_base64_image(image_path):
     if os.path.exists(image_path):
         try:
@@ -156,7 +157,7 @@ for i, p in enumerate(packs):
 
 # --- FORMULAIRE ---
 st.divider()
-msg = st.text_area("Votre mot doux (s'affiche en noir sur fond blanc) :")
+msg = st.text_area("✍️Votre touche personnelle:")
 nom_vip = st.text_input("Votre nom pour la carte de fidélité :")
 
 # --- CARTE DE FIDÉLITÉ ---
