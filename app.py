@@ -16,15 +16,16 @@ def get_base64_image(image_path):
             return base64.b64encode(img_file.read()).decode()
     return ""
 
-# Récupération des images locales
+# Récupération des images locales (Assure-toi que wavelogo.png est bien dans ton dossier)
 img_logo = get_base64_image("logo.jpg")
 img_sweet = get_base64_image("bouquet.jpeg")
 img_love = get_base64_image("fleur.jpeg")
+img_wave_local = get_base64_image("wavelogo.png") # Récupération locale de Wave
 
 if 'panier' not in st.session_state:
     st.session_state['panier'] = []
 
-# --- CSS PERSONNALISÉ ---
+# --- CSS ---
 st.markdown(f"""
     <style>
     [data-testid="stSidebar"] {{ display: none; }}
@@ -63,19 +64,6 @@ st.markdown(f"""
     }}
 
     .content-spacer {{ padding-top: 100px; }}
-
-    /* Style des boutons radio */
-    div[data-testid="stMarkdownContainer"] > p {{ color: white !important; font-weight: bold; }}
-    
-    .insta-footer {{
-        margin: 40px auto;
-        padding: 15px;
-        max-width: 250px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 15px;
-        text-align: center;
-        backdrop-filter: blur(10px);
-    }}
     </style>
 
     <div class="nav-bar">
@@ -97,12 +85,9 @@ st.markdown(f"""
 st.write("### 🌸 Nos Valentine Packages")
 col1, col2 = st.columns(2)
 
-p1_img = f"data:image/jpeg;base64,{img_sweet}"
-p2_img = f"data:image/jpeg;base64,{img_love}"
-
 packs = [
-    {"nom": "PACK SWEET HEART", "prix": "20.000 F", "img": p1_img},
-    {"nom": "PACK LOVE STORY", "prix": "30.000 F", "img": p2_img}
+    {"nom": "PACK SWEET HEART", "prix": "20.000 F", "img": f"data:image/jpeg;base64,{img_sweet}"},
+    {"nom": "PACK LOVE STORY", "prix": "30.000 F", "img": f"data:image/jpeg;base64,{img_love}"}
 ]
 
 for i, p in enumerate(packs):
@@ -142,7 +127,7 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# --- PAIEMENT (RADIO) ---
+# --- PAIEMENT (RADIO AVEC LOGO WAVE LOCAL) ---
 st.markdown("<br>", unsafe_allow_html=True)
 st.subheader("💳 Mode de paiement")
 
@@ -152,19 +137,22 @@ option_paiement = st.radio(
     index=0
 )
 
-# Affichage du logo correspondant à l'option choisie pour confirmer visuellement
-logos st.image ("wavelogo.png")= {  "Wave - Mobile Money": "wavelogo.png", 
-    "Orange Money": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Orange_logo.svg",
-    "MasterCard": "https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
+# Préparation des sources d'images (Mélange Local et URL stables)
+wave_src = f"data:image/png;base64,{img_wave_local}"
+orange_src = "https://upload.wikimedia.org/wikipedia/commons/c/c8/Orange_logo.svg"
+master_src = "https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
+
+logos = {
+    "Wave - Mobile Money": wave_src,
+    "Orange Money": orange_src,
+    "MasterCard": master_src
 }
 
-# On ajoute un style blanc autour du logo Wave s'il est sélectionné pour qu'il soit bien visible
-bg_style = "background: white; padding: 10px; border-radius: 10px;" if option_paiement == "Wave - Mobile Money" else ""
-
+# Affichage avec un petit fond blanc pour que le logo Wave ressorte bien
 st.markdown(f"""
-    <div style="text-align: center; margin: 10px 0;">
-        <div style="display: inline-block; {bg_style}">
-            <img src="{logos[option_paiement]}" height="50" style="object-fit: contain;">
+    <div style="text-align: center; margin: 15px 0;">
+        <div style="display: inline-block; background: white; padding: 12px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+            <img src="{logos[option_paiement]}" height="45" style="object-fit: contain;">
         </div>
     </div>
 """, unsafe_allow_html=True)
@@ -174,22 +162,19 @@ if st.button("🚀 CONFIRMER MA COMMANDE", type="primary", use_container_width=T
     if nom and prenom and st.session_state['panier']:
         articles = ", ".join([x['nom'] for x in st.session_state['panier']])
         wa_msg = f"Bonjour Kalina ! Je commande : {articles}. Paiement via {option_paiement}. Client : {prenom} {nom}."
-        
         st.markdown(f'''
             <a href="https://wa.me/221774474769?text={wa_msg}" target="_blank" style="text-decoration:none;">
-                <div style="background:#25d366; color:white; padding:18px; border-radius:12px; text-align:center; font-weight:bold; box-shadow: 0 4px 15px rgba(37,211,102,0.4);">
+                <div style="background:#25d366; color:white; padding:18px; border-radius:12px; text-align:center; font-weight:bold;">
                     PAYER AVEC {option_paiement.upper()} SUR WHATSAPP 📲
                 </div>
             </a>
         ''', unsafe_allow_html=True)
-    elif not st.session_state['panier']:
-        st.error("Votre panier est vide !")
     else:
-        st.warning("Merci d'entrer votre nom pour la carte VIP.")
+        st.warning("Vérifiez votre nom et votre panier.")
 
 # --- FOOTER ---
 st.markdown(f"""
-    <div class="insta-footer">
+    <div style="margin: 40px auto; padding: 15px; max-width: 250px; background: rgba(255, 255, 255, 0.1); border-radius: 15px; text-align: center; backdrop-filter: blur(10px);">
         <a href="https://www.instagram.com/the_floral_corner/" style="text-decoration:none; color:white; font-size:0.8rem; font-weight:bold;" target="_blank">
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" width="22" style="vertical-align:middle; margin-right:8px;">
             @the_floral_corner
