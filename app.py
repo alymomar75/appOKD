@@ -18,11 +18,10 @@ def get_base64_image(image_path):
 
 img_logo = get_base64_image("logo.jpg")
 
-# Initialisation du panier dans la session
 if 'panier' not in st.session_state:
     st.session_state['panier'] = []
 
-# --- CSS AVANCÉ ---
+# --- CSS RÉPARÉ POUR MOBILE & DESIGN PRO ---
 st.markdown(f"""
     <style>
     [data-testid="stSidebar"] {{ display: none; }}
@@ -41,72 +40,76 @@ st.markdown(f"""
         100% {{ background-position: 0% 50%; }}
     }}
 
-    /* NAVBAR AVEC PANIER CLIQUABLE */
+    /* NAVBAR FIXÉE (LOGO GAUCHE / PANIER DROITE) */
     .nav-bar {{
         position: fixed;
-        top: 0; left: 0; width: 100%; height: 80px;
+        top: 0; left: 0; width: 100%; height: 75px;
         background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0 40px;
+        padding: 0 20px;
         z-index: 9999;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }}
 
     .logo-circle {{
-        width: 60px; height: 60px;
+        width: 55px; height: 55px;
         border-radius: 50%; border: 2px solid white;
         background: white; object-fit: cover;
     }}
 
-    .content-spacer {{ padding-top: 110px; }}
+    .content-spacer {{ padding-top: 100px; }}
 
-    /* BOUTON PANIER DANS LA NAV */
-    .cart-btn {{
-        background: none;
-        border: none;
-        color: white;
-        font-size: 24px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 8px;
+    /* DESIGN DU PIED DE PAGE INSTAGRAM (PRO) */
+    .insta-footer {{
+        margin: 50px auto;
+        padding: 20px;
+        max-width: 300px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        text-align: center;
+        backdrop-filter: blur(10px);
     }}
 
-    /* PRODUITS */
-    .product-box {{
-        background: rgba(255, 255, 255, 0.85); 
-        padding: 15px; border-radius: 18px; text-align: center;
+    .insta-badge {{
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none;
+        color: white !important;
+        font-weight: 600;
+        font-size: 14px;
+        letter-spacing: 0.5px;
+    }}
+
+    /* BOUTONS STREAMLIT HARMONISÉS */
+    div.stButton > button {{
+        border-radius: 12px !important;
+        border: 1px solid rgba(255,255,255,0.2) !important;
     }}
     </style>
-""", unsafe_allow_html=True)
 
-# --- BARRE DE NAVIGATION ---
-# Note: On utilise des colonnes Streamlit pour simuler la navbar car les boutons HTML bruts ne peuvent pas déclencher de fonctions Python facilement
-with st.container():
-    cols_nav = st.columns([1, 10, 2])
-    with cols_nav[0]:
-        st.markdown(f'<img src="data:image/jpeg;base64,{img_logo}" class="logo-circle">', unsafe_allow_html=True)
-    with cols_nav[2]:
-        if st.button(f"🛒 ({len(st.session_state['panier'])})"):
-            st.session_state['voir_panier'] = True
-            st.toast("Direction votre panier...")
+    <div class="nav-bar">
+        <img src="data:image/jpeg;base64,{img_logo}" class="logo-circle">
+        <div style="color: white; font-weight: bold; font-size: 1.2rem;">
+            🛒 <span style="background: #ff69b4; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">{len(st.session_state['panier'])}</span>
+        </div>
+    </div>
+    
+    <div class="content-spacer"></div>
 
-st.markdown('<div class="content-spacer"></div>', unsafe_allow_html=True)
-
-# --- TITRE ---
-st.markdown("""
     <div style="text-align: center; color: white;">
-        <h1 style="font-size: 2.8rem; margin:0; color: #2d5a27;">THE <span style="color: #ff69b4; font-family: serif; font-style: italic;">Floral</span> CORNER</h1>
-        <p style="letter-spacing: 5px; opacity: 0.9;">BY KALINA</p>
+        <h1 style="font-size: 2.2rem; margin:0; color: #2d5a27;">THE <span style="color: #ff69b4; font-family: serif; font-style: italic;">Floral</span> CORNER</h1>
+        <p style="letter-spacing: 5px; opacity: 0.8; font-size: 0.7rem;">BY KALINA</p>
     </div>
 """, unsafe_allow_html=True)
 
 # --- CATALOGUE ---
-st.write("### Nos Valentine Packages")
+st.write("### 🌸 Nos Valentine Packages")
 col1, col2 = st.columns(2)
 packs = [
     {"nom": "PACK SWEET HEART", "prix": "20.000 F", "img": "https://images.unsplash.com/photo-1591886960571-74d43a9d4166"},
@@ -116,65 +119,60 @@ packs = [
 for i, p in enumerate(packs):
     with (col1 if i == 0 else col2):
         st.markdown(f"""
-            <div class="product-box">
-                <img src="{p['img']}" style="width:100%; border-radius:12px; height:200px; object-fit:cover;">
-                <h4 style="color: #111; margin:10px 0 5px 0;">{p['nom']}</h4>
-                <p style="color: #d14d5d; font-weight: bold;">{p['prix']}</p>
+            <div style="background: rgba(255,255,255,0.85); padding:12px; border-radius:18px; margin-bottom:10px; text-align:center;">
+                <img src="{p['img']}" style="width:100%; border-radius:12px; height:180px; object-fit:cover;">
+                <h5 style="color: #111; margin:10px 0 2px 0; font-size:0.9rem;">{p['nom']}</h5>
+                <p style="color: #d14d5d; font-weight: bold; font-size:0.8rem;">{p['prix']}</p>
             </div>
         """, unsafe_allow_html=True)
-        # Bouton Ajouter au panier
-        if st.button(f"Ajouter au panier", key=f"add_{i}"):
+        if st.button(f"Ajouter au panier", key=f"add_{i}", use_container_width=True):
             st.session_state['panier'].append(p)
-            st.toast(f"{p['nom']} ajouté !")
             st.rerun()
 
-# --- SECTION PANIER (S'affiche si on clique sur l'icône) ---
-if st.session_state.get('voir_panier', False):
-    st.markdown("---")
-    st.subheader("🛒 Votre Panier")
-    if len(st.session_state['panier']) > 0:
+# --- RÉCAPITULATIF PANIER ---
+if len(st.session_state['panier']) > 0:
+    with st.expander("🧐 Voir le détail de mon panier"):
         for item in st.session_state['panier']:
-            st.write(f"✅ {item['nom']} - {item['prix']}")
-        if st.button("Vider le panier"):
+            st.write(f"• {item['nom']} ({item['prix']})")
+        if st.button("Vider mon panier", type="secondary"):
             st.session_state['panier'] = []
             st.rerun()
-    else:
-        st.info("Votre panier est vide pour le moment.")
 
-# --- FIDÉLITÉ ---
+# --- CARTE VIP ---
 st.divider()
-st.subheader("Carte VIP")
-c_in, c_vis = st.columns(2)
-with c_in:
-    nom = st.text_input("Nom")
-    prenom = st.text_input("Prénom")
-with c_vis:
-    user_name = f"{prenom} {nom}".strip().upper()
-    st.markdown(f"""
-        <div style="background: linear-gradient(135deg, #111, #333); border: 1px solid #d4af37; border-radius: 12px; padding: 20px; color: #d4af37;">
-            <div style="font-size: 0.6rem;">VIP MEMBER</div>
-            <div style="font-size: 1.2rem; margin: 10px 0;">{user_name if user_name else "CLIENT"}</div>
-        </div>
-    """, unsafe_allow_html=True)
-
-# --- VALIDATION ---
-if st.button("🚀 CONFIRMER MA COMMANDE", type="primary"):
-    if nom and prenom and st.session_state['panier']:
-        articles = ", ".join([x['nom'] for x in st.session_state['panier']])
-        wa_msg = f"Bonjour Kalina ! Je commande : {articles}. Je suis {prenom} {nom}."
-        st.success("Prêt pour l'envoi !")
-        st.markdown(f'<a href="https://wa.me/221774474769?text={wa_msg}" target="_blank" style="text-decoration:none;"><div style="background:#25d366; color:white; padding:15px; border-radius:10px; text-align:center; font-weight:bold;">FINALISER SUR WHATSAPP 📲</div></a>', unsafe_allow_html=True)
-    elif not st.session_state['panier']:
-        st.error("Votre panier est vide !")
-    else:
-        st.warning("Complétez votre nom pour la carte VIP.")
-
-# --- FOOTER INSTAGRAM ---
+nom = st.text_input("Nom")
+prenom = st.text_input("Prénom")
+user_name = f"{prenom} {nom}".strip().upper()
 st.markdown(f"""
-    <div style="text-align: center; margin-top: 50px; padding: 30px; background: rgba(0,0,0,0.1);">
-        <a href="https://www.instagram.com/the_floral_corner/" target="_blank" style="text-decoration:none; color:white;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" width="30" style="margin-bottom:10px;"><br>
-            @the_floral_corner
+    <div style="background: linear-gradient(135deg, #111, #333); border: 1px solid #d4af37; border-radius: 15px; padding: 20px; color: #d4af37; box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
+        <div style="font-size: 0.6rem; letter-spacing: 2px;">THE FLORAL CORNER VIP</div>
+        <div style="font-size: 1.1rem; margin: 15px 0; font-weight: bold;">{user_name if user_name else "VOTRE NOM"}</div>
+        <div style="text-align: right; font-size: 0.5rem; opacity: 0.6;">SÉNÉGAL 2026</div>
+    </div>
+""", unsafe_allow_html=True)
+
+# --- BOUTON DE VALIDATION ---
+st.markdown("<br>", unsafe_allow_html=True)
+if st.button("☑ CONFIRMER MA COMMANDE", type="primary", use_container_width=True):
+    if nom and prenom and st.session_state['panier']:
+        items_list = ", ".join([x['nom'] for x in st.session_state['panier']])
+        wa_msg = f"Bonjour Kalina ! Je souhaite valider ma commande pour : {items_list}. Je suis {prenom} {nom}."
+        st.markdown(f'''<a href="https://wa.me/221774474769?text={wa_msg}" target="_blank" style="text-decoration:none;">
+            <div style="background:#25d366; color:white; padding:18px; border-radius:12px; text-align:center; font-weight:bold; box-shadow: 0 4px 15px rgba(37,211,102,0.4);">
+                ENVOYER SUR WHATSAPP 📲
+            </div></a>''', unsafe_allow_html=True)
+    else:
+        st.warning("Vérifiez votre nom et votre panier.")
+
+# --- FOOTER INSTAGRAM PROFESSIONNEL ---
+st.markdown(f"""
+    <div class="insta-footer">
+        <a href="https://www.instagram.com/the_floral_corner/" class="insta-badge" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" width="28">
+            <span>the_floral_corner</span>
         </a>
+    </div>
+    <div style="text-align: center; opacity: 0.5; font-size: 0.6rem; color: white; padding-bottom: 20px;">
+        © 2026 THE FLORAL CORNER • DAKAR, SÉNÉGAL
     </div>
 """, unsafe_allow_html=True)
