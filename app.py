@@ -163,16 +163,36 @@ st.markdown("""
     <div style="text-align: center; color: white; font-size: 0.7rem; opacity: 0.8; margin-bottom: 5px;">
         Modes de règlement acceptés :
     </div>
+    st.markdown("""
+    <div style="text-align: center; color: white; font-size: 0.7rem; opacity: 0.8; margin-bottom: 5px;">
+        Modes de règlement acceptés :
+    </div>
     <div class="payment-methods">
-        <st.image ("wavelogo.png") class="payment-logo">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Orange_logo.svg/1024px-Orange_logo.svg.png" class="payment-logo">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" class="payment-logo">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/1280px-MasterCard_Logo.svg.png" class="payment-logo">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Apple_Pay_logo.svg/1200px-Apple_Pay_logo.svg.png" class="payment-logo">
+        <!-- Wave -->
+        <a href="https://www.wave.com/fr" target="_blank">
+            <img src="wavelogo.png" class="payment-logo">
+        </a>
+        <!-- Orange Money -->
+        <a href="https://www.orange.sn/orange-money" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c8/Orange_logo.svg" class="payment-logo">
+        </a>
+        <!-- Visa -->
+        <a href="https://www.visa.com" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" class="payment-logo">
+        </a>
+        <!-- MasterCard -->
+        <a href="https://www.mastercard.com" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/MasterCard_Logo.svg" class="payment-logo">
+        </a>
+        <!-- Apple Pay -->
+        <a href="https://www.apple.com/apple-pay/" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/Apple_Pay_logo.svg" class="payment-logo">
+        </a>
     </div>
 """, unsafe_allow_html=True)
 
-if st.button("🚀 CONFIRMER MA COMMANDE", type="primary", use_container_width=True):
+
+if st.button("✔ CONFIRMER MA COMMANDE", type="primary", use_container_width=True):
     if nom and prenom and st.session_state['panier']:
         items_list = ", ".join([x['nom'] for x in st.session_state['panier']])
         wa_msg = f"Bonjour Kalina ! Je commande : {items_list}. Je suis {prenom} {nom}."
