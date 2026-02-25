@@ -158,18 +158,17 @@ st.markdown(f"""
 # --- SECTION PAIEMENT & VALIDATION ---
 st.markdown("<br>", unsafe_allow_html=True)
 
-# Logos des moyens de paiement
 st.markdown("""
     <div style="text-align: center; color: white; font-size: 0.7rem; opacity: 0.8; margin-bottom: 5px;">
         Modes de règlement acceptés :
     </div>
-    st.markdown("""
-    <div style="text-align: center; color: white; font-size: 0.7rem; opacity: 0.8; margin-bottom: 5px;">
-        Modes de règlement acceptés :
-    </div>
     <div class="payment-methods">
-        <!-- Wave -->
-        <a href="https://www.wave.com/fr" target="_blank">
+        <!-- Wave Android -->
+        <a href="https://play.google.com/store/apps/details?id=com.wave.personal" target="_blank">
+            <img src="wavelogo.png" class="payment-logo">
+        </a>
+        <!-- Wave iOS -->
+        <a href="https://apps.apple.com/app/wave-mobile-money/id1500780319" target="_blank">
             <img src="wavelogo.png" class="payment-logo">
         </a>
         <!-- Orange Money -->
@@ -181,34 +180,4 @@ st.markdown("""
             <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" class="payment-logo">
         </a>
         <!-- MasterCard -->
-        <a href="https://www.mastercard.com" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/MasterCard_Logo.svg" class="payment-logo">
-        </a>
-        <!-- Apple Pay -->
-        <a href="https://www.apple.com/apple-pay/" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/Apple_Pay_logo.svg" class="payment-logo">
-        </a>
-    </div>
-""", unsafe_allow_html=True)
-
-
-if st.button("✔ CONFIRMER MA COMMANDE", type="primary", use_container_width=True):
-    if nom and prenom and st.session_state['panier']:
-        items_list = ", ".join([x['nom'] for x in st.session_state['panier']])
-        wa_msg = f"Bonjour Kalina ! Je commande : {items_list}. Je suis {prenom} {nom}."
-        st.markdown(f'''<a href="https://wa.me/221774474769?text={wa_msg}" target="_blank" style="text-decoration:none;">
-            <div style="background:#25d366; color:white; padding:18px; border-radius:12px; text-align:center; font-weight:bold;">
-                FINALISER SUR WHATSAPP 📲
-            </div></a>''', unsafe_allow_html=True)
-    else:
-        st.warning("Veuillez remplir votre nom et ajouter un article.")
-
-# --- FOOTER ---
-st.markdown(f"""
-    <div class="insta-footer">
-        <a href="https://www.instagram.com/thefloral_corner/" style="text-decoration:none; color:white; font-size:0.8rem; font-weight:bold;" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" width="22" style="vertical-align:middle; margin-right:8px;">
-            @the_floral_corner
-        </a>
-    </div>
-""", unsafe_allow_html=True)
+        <a href="https://www
