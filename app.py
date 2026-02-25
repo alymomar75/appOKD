@@ -153,15 +153,19 @@ option_paiement = st.radio(
 )
 
 # Affichage du logo correspondant à l'option choisie pour confirmer visuellement
-logos = {
-    "Wave - Mobile Money": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Wave_Logo.png",
+logos = {  "Wave - Mobile Money": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Wave_logo.png", 
     "Orange Money": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Orange_logo.svg",
     "MasterCard": "https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
 }
 
+# On ajoute un style blanc autour du logo Wave s'il est sélectionné pour qu'il soit bien visible
+bg_style = "background: white; padding: 10px; border-radius: 10px;" if option_paiement == "Wave - Mobile Money" else ""
+
 st.markdown(f"""
     <div style="text-align: center; margin: 10px 0;">
-        <img src="{logos[option_paiement]}" height="40">
+        <div style="display: inline-block; {bg_style}">
+            <img src="{logos[option_paiement]}" height="50" style="object-fit: contain;">
+        </div>
     </div>
 """, unsafe_allow_html=True)
 
