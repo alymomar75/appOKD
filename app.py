@@ -164,7 +164,7 @@ st.markdown("""
         Modes de règlement acceptés :
     </div>
     <div class="payment-methods">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Wave_Logo.png" class="payment-logo">
+        <img src=("wavelogo.png") class="payment-logo">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Orange_logo.svg/1024px-Orange_logo.svg.png" class="payment-logo">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" class="payment-logo">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/1280px-MasterCard_Logo.svg.png" class="payment-logo">
