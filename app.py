@@ -133,7 +133,7 @@ st.subheader("💳 Mode de paiement")
 
 option_paiement = st.radio(
     "Sélectionnez votre option de règlement :",
-    ("Wave - Mobile Money", "Orange Money", "MasterCard"),
+    ("Wave - Mobile Money", "Orange Money", "MasterCard","Espece"),
     index=0
 )
 
