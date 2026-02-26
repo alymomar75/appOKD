@@ -16,11 +16,12 @@ def get_base64_image(image_path):
             return base64.b64encode(img_file.read()).decode()
     return ""
 
-# Récupération des images locales (Assure-toi que wavelogo.png est bien dans ton dossier)
+# Récupération des images locales
 img_logo = get_base64_image("logo.jpg")
 img_sweet = get_base64_image("bouquet.jpeg")
 img_love = get_base64_image("fleur.jpeg")
-img_wave_local = get_base64_image("wavelogo.png") # Récupération locale de Wave
+img_wave_local = get_base64_image("wavelogo.png")  # Logo Wave
+img_cash_local = get_base64_image("cash.png")      # Logo Cash (ajoute un fichier cash.png dans ton dossier)
 
 if 'panier' not in st.session_state:
     st.session_state['panier'] = []
@@ -127,28 +128,29 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# --- PAIEMENT (RADIO AVEC LOGO WAVE LOCAL) ---
+# --- PAIEMENT ---
 st.markdown("<br>", unsafe_allow_html=True)
 st.subheader("💳 Mode de paiement")
 
 option_paiement = st.radio(
     "Sélectionnez votre option de règlement :",
-    ("Wave - Mobile Money", "Orange Money", "MasterCard","Espece"),
+    ("Wave - Mobile Money", "Orange Money", "MasterCard", "Espèces"),
     index=0
 )
 
-# Préparation des sources d'images (Mélange Local et URL stables)
+# Logos
 wave_src = f"data:image/png;base64,{img_wave_local}"
 orange_src = "https://upload.wikimedia.org/wikipedia/commons/c/c8/Orange_logo.svg"
 master_src = "https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
+cash_src = f"data:image/png;base64,{img_cash_local}"
 
 logos = {
     "Wave - Mobile Money": wave_src,
     "Orange Money": orange_src,
-    "MasterCard": master_src
+    "MasterCard": master_src,
+    "Espèces": cash_src
 }
 
-# Affichage avec un petit fond blanc pour que le logo Wave ressorte bien
 st.markdown(f"""
     <div style="text-align: center; margin: 15px 0;">
         <div style="display: inline-block; background: white; padding: 12px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
@@ -170,14 +172,4 @@ if st.button("🚀 CONFIRMER MA COMMANDE", type="primary", use_container_width=T
             </a>
         ''', unsafe_allow_html=True)
     else:
-        st.warning("Vérifiez votre nom et votre panier.")
-
-# --- FOOTER ---
-st.markdown(f"""
-    <div style="margin: 40px auto; padding: 15px; max-width: 250px; background: rgba(255, 255, 255, 0.1); border-radius: 15px; text-align: center; backdrop-filter: blur(10px);">
-        <a href="https://www.instagram.com/the_floral_corner/" style="text-decoration:none; color:white; font-size:0.8rem; font-weight:bold;" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" width="22" style="vertical-align:middle; margin-right:8px;">
-            @the_floral_corner
-        </a>
-    </div>
-""", unsafe_allow_html=True)
+        st
