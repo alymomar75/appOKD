@@ -78,8 +78,10 @@ st.markdown(f"""
 
     <div style="text-align: center; color: white;">
         <h1 style="font-size: 2.2rem; margin:0; color: #2d5a27;">THE <span style="color: #ff69b4; font-family: serif; font-style: italic;">Floral</span> CORNER</h1>
-        <p style="letter-spacing: 5px; opacity: 0.8; font-size: 0.7rem;">st.write=("Digitalisation des Menus & Services")
+<p style="letter-spacing: 5px; opacity: 0.8; font-size: 0.7rem;">
+    Digitalisation des Menus & Services
 </p>
+
     </div>
 """, unsafe_allow_html=True)
 
