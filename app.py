@@ -17,7 +17,8 @@ def get_base64_image(image_path):
         if os.path.exists(image_path):
             with open(image_path, "rb") as img_file:
                 return base64.b64encode(img_file.read()).decode()
-    except: pass
+    except:
+        pass
     return ""
 
 # Initialisation des variables de session
@@ -27,41 +28,41 @@ if 'prix_pack' not in st.session_state:
     st.session_state.prix_pack = ""
 
 # --- CSS PERSONNALISÉ ---
-st.markdown(f"""
+st.markdown("""
     <style>
-    [data-testid="stHeader"] {{ visibility: hidden; }}
-    .stApp {{
+    [data-testid="stHeader"] { visibility: hidden; }
+    .stApp {
         background: linear-gradient(-45deg, #7d0a0a, #d14d5d, #2d5a27, #fce4ec);
         background-size: 400% 400%;
         animation: gradient 15s ease infinite;
-    }}
-    @keyframes gradient {{
-        0% {{ background-position: 0% 50%; }}
-        50% {{ background-position: 100% 50%; }}
-        100% {{ background-position: 0% 50%; }}
-    }}
-    .product-card {{
+    }
+    @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    .product-card {
         background: rgba(255,255,255,0.9);
         padding: 15px;
         border-radius: 15px;
         text-align: center;
         margin-bottom: 10px;
         color: #333;
-    }}
-    .product-img {{
+    }
+    .product-img {
         width: 100%;
         height: 180px;
         object-fit: cover;
         border-radius: 10px;
-    }}
-    .vip-card {{
+    }
+    .vip-card {
         background: linear-gradient(135deg, #111, #333);
         color: #d4af37;
         padding: 20px;
         border-radius: 15px;
         border: 1px solid #d4af37;
         box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-    }}
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -82,7 +83,6 @@ packs = [
 
 col1, col2 = st.columns(2)
 for i, p in enumerate(packs):
-    # Correction de la logique de colonne pour éviter le TypeError
     target_col = col1 if i % 2 == 0 else col2
     with target_col:
         st.markdown(f"""
@@ -136,7 +136,6 @@ if st.button("🚀 VALIDER MA COMMANDE", type="primary", use_container_width=Tru
         st.warning("⚠️ Veuillez sélectionner un pack floral ci-dessus.")
     else:
         st.balloons()
-        # Encodage propre du message pour WhatsApp
         texte_commande = (
             f"Bonjour Kalina ! Nouvelle commande :\n\n"
             f"👤 Client : {nom_affichage}\n"
