@@ -75,7 +75,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- CATALOGUE ---
-st.write("### 🌸 Nos Valentine Packages")
+st.markdown("### 🌸 Nos Valentine Packages")
 packs = [
     {"nom": "PACK SWEET HEART", "prix": "20.000 F", "img": "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?q=80&w=500"},
     {"nom": "PACK MBEUGUEL SIGNATURE", "prix": "60.000 F", "img": "https://images.unsplash.com/photo-1533616688419-b7a585564566?q=80&w=500"}
@@ -95,7 +95,7 @@ for i, p in enumerate(packs):
         if st.button(f"Choisir {p['nom']}", key=f"btn_{i}", use_container_width=True):
             st.session_state.choix_pack = p['nom']
             st.session_state.prix_pack = p['prix']
-            st.toast(f"✅ {p['nom']} sélectionné !")
+            st.success(f"✅ {p['nom']} sélectionné !")
 
 # Affichage du choix actuel
 if st.session_state.choix_pack:
