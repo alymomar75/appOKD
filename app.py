@@ -18,7 +18,6 @@ def get_base64_image(image_path):
 
 # Récupération des images locales
 img_logo = get_base64_image("logo.jpg")
-st.write=("Digitalisation des Menus & Services")
 img_sweet = get_base64_image("bouquet.jpeg")
 img_love = get_base64_image("fleur.jpeg")
 img_wave_local = get_base64_image("wavelogo.png")  # Logo Wave
@@ -79,7 +78,8 @@ st.markdown(f"""
 
     <div style="text-align: center; color: white;">
         <h1 style="font-size: 2.2rem; margin:0; color: #2d5a27;">THE <span style="color: #ff69b4; font-family: serif; font-style: italic;">Floral</span> CORNER</h1>
-        <p style="letter-spacing: 5px; opacity: 0.8; font-size: 0.7rem;">BY KALINA</p>
+        <p style="letter-spacing: 5px; opacity: 0.8; font-size: 0.7rem;">st.write=("Digitalisation des Menus & Services")
+</p>
     </div>
 """, unsafe_allow_html=True)
 
