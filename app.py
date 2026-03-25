@@ -18,6 +18,7 @@ def get_base64_image(image_path):
 
 # Récupération des images locales
 img_logo = get_base64_image("logo.jpg")
+st.write=Digitalisation des Menus & Services
 img_sweet = get_base64_image("bouquet.jpeg")
 img_love = get_base64_image("fleur.jpeg")
 img_wave_local = get_base64_image("wavelogo.png")  # Logo Wave
