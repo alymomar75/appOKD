@@ -165,10 +165,13 @@ if st.button("🚀 CONFIRMER MA COMMANDE", type="primary", use_container_width=T
     if nom and prenom and st.session_state['panier']:
         articles = ", ".join([x['nom'] for x in st.session_state['panier']])
         wa_msg = f"Bonjour Kalina ! Je commande : {articles}. Paiement via {option_paiement}. Client : {prenom} {nom}."
-        st.markdown(f'''
+        st.markdown(f"""
             <a href="https://wa.me/221774474769?text={wa_msg}" target="_blank" style="text-decoration:none;">
                 <div style="background:#25d366; color:white; padding:18px; border-radius:12px; text-align:center; font-weight:bold;">
                     PAYER AVEC {option_paiement.upper()} SUR WHATSAPP 📲
                 </div>
             </a>
-        ''', unsafe
+        """, unsafe_allow_html=True)
+    else:
+        st.warning("⚠️ Veuillez renseigner votre nom et prénom et ajouter au moins un article au
+        
