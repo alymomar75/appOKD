@@ -21,12 +21,12 @@ img_logo = get_base64_image("logo.jpg")
 img_sweet = get_base64_image("bouquet.jpeg")
 img_love = get_base64_image("fleur.jpeg")
 img_wave_local = get_base64_image("wavelogo.png")  # Logo Wave
-img_cash_local = get_base64_image("cash.png")      # Logo Cash (ajoute un fichier cash.png dans ton dossier)
+img_cash_local = get_base64_image("cash.png")      # Logo Cash
 
 if 'panier' not in st.session_state:
     st.session_state['panier'] = []
 
-# --- CSS ---
+# --- CSS & HEADER ---
 st.markdown(f"""
     <style>
     [data-testid="stSidebar"] {{ display: none; }}
@@ -49,7 +49,6 @@ st.markdown(f"""
         top: 0; left: 0; width: 100%; height: 75px;
         background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -78,10 +77,9 @@ st.markdown(f"""
 
     <div style="text-align: center; color: white;">
         <h1 style="font-size: 2.2rem; margin:0; color: #2d5a27;">THE <span style="color: #ff69b4; font-family: serif; font-style: italic;">Floral</span> CORNER</h1>
-<p style="letter-spacing: 5px; opacity: 0.8; font-size: 0.7rem;">
-    Digitalisation des Menus & Services
-</p>
-
+        <p style="letter-spacing: 5px; opacity: 0.8; font-size: 0.7rem;">
+            Digitalisation des Menus & Services
+        </p>
     </div>
 """, unsafe_allow_html=True)
 
@@ -173,6 +171,4 @@ if st.button("🚀 CONFIRMER MA COMMANDE", type="primary", use_container_width=T
                     PAYER AVEC {option_paiement.upper()} SUR WHATSAPP 📲
                 </div>
             </a>
-        ''', unsafe_allow_html=True)
-    else:
-        st
+        ''', unsafe
